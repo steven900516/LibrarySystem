@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<style>
+	.mbody{
+		width: 98%;
+		height: 96%;
+		margin: 0 auto;
+		border: 2px solid gray;
+		border-radius: 15px;
+		box-shadow:10px 10px 5px #888888;
+		position: absolute;
+		background-image:url("background.jpg") ;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+	input{
+		height: 35px;
+		background: #c90c18;
+		color: #ffffff;
+		border-radius: 5px;
+		border: 2px solid #db5e66;
+		font-size: 16px;
+		cursor: pointer;
+		transition: 0.3s;
+	}
+	input:hover{
+		background-color: #02bbff;
+		border: 1px solid orange;
+		transform: scale(1.08);
+	}
+	*{
+		margin: 0;
+		padding: 0;
+		background-color:#e3eff5;
+	}
+	div{
+		width: 200px;
+		height: 200px;
+		background-color: #1E90FF;
+	}
+	.center-in-center{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		-webkit-transform: translate(-50%, -50%);
+		-moz-transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		-o-transform: translate(-50%, -50%);
+		transform: translate(-50%, -50%);
+	}
+
+</style>
+	<head>
+		<meta charset="utf-8">
+		<title>登录</title>
+		<!-- <script src="vue.js" type="text/javascript" charset="utf-8"></script> -->
+		<script src="js/vue.js"></script>
+		<script src="js/axios.min.js"></script>
+		<script type="text/javascript">
+			var Singleton = (function (name) {
+				var instance
+
+				var Obj = function (name) {
+					this.name = name
+				}
+
+				Obj.prototype.getName = function(){
+					return this.name
+				}
+
+				var CreateSin = function (name) {
+					if(!instance){
+						instance = new Obj(name)
+					}
+					return instance
+				}
+
+				return CreateSin
+			})(name)
+
+			var a = new Singleton('made by: Lin Yixuan & Guo Yunpeng')
+			function display_alert()
+			{
+				alert(a.getName())
+			}
+		</script>
+	</head>
+	<body>
+	<div class="mbody" id="mbody">
+		<table border="1" class="center-in-center" width="600px" height="300px" cellpadding="5px"   cellspacing="0px">
+			<tr>  <td height="150px" align="center" style="font-size:30px">图书馆登陆页面</td>   </tr>
+			<tr>  <td>用户ID： &nbsp; &nbsp; <input  width="200px" type="text" name="登录ID"   v-model="uid"  value="请输入用户Id"></td></tr>
+			<tr>  <td>密码:  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;<input  width="200px" type="password"  v-model="passWord"  name="登录密码" value=""> </td>   </tr>
+			<tr>  <td  align="right"><input type="button" onclick="display_alert()"value="about us" />&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input   width="100px"  type = "button" @click=onSubmit($event) value="登录"    name="登录信息"></td>   </tr>
+		</table>
+
+	</div>
+	</body>
+	
+	<script type="text/javascript">
+	var app = new Vue({
+		el: '#mbody',
+		data: {
+			uid: '',
+			passWord: '',
+		},
+		methods:{
+			onSubmit: function(event) {
+				axios({
+					method:"post",
+					url:"http://127.0.0.1:8080/login",
+					withCredentials:true,
+					params: {
+						uid: this.uid,
+						passWord: this.passWord
+					}
+				}).then((res)=>{
+					console.log(res.data);
+					if (res.data ) {
+
+						window.location.href = "LibrarySystem.html";
+					}else{
+
+						alert("输入错误  请重新输入");
+					}
+
+
+
+					console.log(res.data);
+				}).catch(err => {
+					console.log('error');
+				});     
+			}
+		}
+
+	})
+	</script>
+</html>

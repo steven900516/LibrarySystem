@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图书归还</title>
+    <style>
+        a:link{
+            color: #333;
+            text-decoration: none;
+        }
+        a:visited{
+            color: #333;
+        }
+        a:hover{
+            color: red;
+        }
+        input:focus{
+            background-color:#00f1e5;
+        }
+        a{
+            width: 150px;
+            height: 50px;
+            background-color: #83c8e4;
+            display: block;
+        }
+        .center{
+            text-align: center;
+            font-size: 30px;
+        }
+        dd{
+            margin:0;
+        }
+
+
+
+    </style>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+</head>
+<body>
+<div  id = "chaxun" class="chaxun">
+    <br/>
+    <table align="center" width="1200px" height="700px"  border="1" cellspacing="10" cellpadding="20" style="background-color:#e7f7d5;">
+        <tr>
+            <td align="center" style="background-color: #cddfeb"><b><i>图书查询与借阅</i></b>
+                <dl>
+                    <dt>
+                        <img src ="book.png" width="100" height="100"/>
+                    </dt>
+                    <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="LibrarySystem.html">图书查询</a></dd>
+                    <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="TRY.html">图书借阅</a></dd>
+                    <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;background-color: #83c8e4; ">图书归还</dd>
+                </dl>
+            </td>
+            <td>
+                <form action="" name="ways">
+                    <h1>图书归还</h1><br/><br/><br/><br/><br/><br/>
+
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="background-color: #cddfeb"><b><i>个人信息设置</i></b>
+                <dl>
+                    <dt>
+                        <img src ="license.png" width="100" height="100"/>
+                    </dt>
+                    <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="Id.html">证件信息</a></dd>
+
+                </dl>
+            </td>
+            <td rowspan="3" align="center" valign="top">
+                <table align= center border= 1 cellpadding= 10 cellspacing=0  width=500px><h3>请点击要归还的书目</h3>
+                    <thead>
+                    <tr style="background-color: white;"><td align= center style="width:50px;font-size:20px;height:15px;cellpadding:15px">图书ID</td><td align= center style="width:200px;font-size:20px">借阅时间</td><td align= center style="width:100px;font-size:20px">点击归还</td></tr>
+                    </thead>
+                    <tbody>
+                    <tr style="background-color: white;" v-for ="(book,index) in books":key="index">
+                        <td>{{book.bookid}}</td>
+                        <td>{{book.borrowdate}}</td>
+                        <td align="center"><input type = "button"  id="lend"  value="点击归还"  @click=returnsss(book.bookid)></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="background-color: #cddfeb"><b><i>推荐信息</i></b>
+                <dl>
+                    <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="Commands.html">图书推荐</a></dd>
+                </dl>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="background-color: #cddfeb"><b><i>安全退出系统</i></b>
+                <dl>
+                    <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="index.html">安全退出</a></dd>
+                </dl>
+            </td>
+        </tr>
+    </table>
+</div>>
+</body>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#chaxun',
+        data: {
+            books: []
+        },
+        methods: {
+            returnsss: function (bookid) {
+                axios({
+                    method: "post",
+                    url: "http://127.0.0.1:8080/delete",
+                    withCredentials: true,
+                    params: {
+                        bookid: bookid
+                    }
+
+                }).then((res) => {
+                    this.books = res.data.returnBooks;
+                }).catch(err => {
+                    console.log('error');
+                });
+            }
+        },
+        created:function(){
+            axios({
+                method: "post",
+                url: "http://127.0.0.1:8080/aa",
+                withCredentials: true,
+                params: {
+
+                }
+            }).then((res) => {
+                this.books = res.data.returnBooks;
+            }).catch(err => {
+                console.log('error');
+            });
+        }
+    })
+</script>
+</html>

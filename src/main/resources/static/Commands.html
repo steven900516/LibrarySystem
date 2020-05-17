@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图书推荐</title>
+    <style>
+        a:link{
+            color: #333;
+            text-decoration: none;
+        }
+        a:visited{
+            color: #333;
+        }
+        a:hover{
+            color: red;
+        }
+        input:focus{
+            background-color:#00f1e5;
+        }
+        a{
+            width: 150px;
+            height: 50px;
+            background-color: #83c8e4;
+            display: block;
+        }
+        .center{
+            text-align: center;
+            font-size: 30px;
+        }
+        dd{
+            margin:0;
+        }
+        .width1{
+            width:100;
+        }
+
+    </style>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+</head>
+<body>
+<div id="chaxun" class="chaxun">
+<br/>
+<table align="center" width="1200px" height="700px"  border="1" cellspacing="10" cellpadding="20" style="background-color:#e7f7d5;">
+    <tr>
+        <td align="center" style="background-color: #cddfeb"><b><i>图书查询与借阅</i></b>
+            <dl>
+                <dt>
+                    <img src ="book.png" width="100" height="100"/>
+                </dt>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="LibrarySystem.html">图书查询</a></dd>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="TRY.html">图书借阅</a></dd>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="Return.html">图书归还</a></dd>
+
+            </dl>
+        </td>
+        <td rowspan="4" align="center" valign="top">
+            <h1>图书推荐排行</h1>
+            <table align= center border= 1 cellpadding= 30 cellspacing=0  width=700px height=200px>
+                <thead>
+                <tr style="background-color: white;"><td align= center style="width:125px;font-size:25px;height:20px">图书排行</td><td align= center style="width:230px;font-size:25px">图书名称</td><td align= center style="font-size:25px">图书id</td><td align= center style="font-size:25px">借阅次数</td></tr>
+                </thead>
+                <tbody>
+                <tr style="background-color: white;" v-for ="(book,index) in tableBooks":key="index">
+                    <td>{{index+1}}</td>
+                    <td>{{book.bookname}}</td>
+                    <td>{{book.bookid}}</td>
+                    <td>{{book.times}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+        </td>
+    </tr>
+    <tr>
+        <td width="300px" align="center" style="background-color: #cddfeb"><b><i>个人信息设置</i></b>
+            <dl>
+                <dt>
+                    <img src ="license.png" width="100" height="100"/>
+                </dt>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="Id.html">证件信息</a></dd>
+
+            </dl>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: #cddfeb"><b><i>推荐信息</i></b>
+            <dl>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;background-color:#83c8e4; ">图书推荐</dd>
+            </dl>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: #cddfeb"><b><i>安全退出系统</i></b>
+            <dl>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="index.html">安全退出</a></dd>
+            </dl>
+        </td>
+    </tr>
+</table>
+</div>
+</body>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#chaxun',
+        data: {
+            tableBooks: []
+        },
+
+        created:function(){
+            axios({
+                method: "post",
+                url: "http://127.0.0.1:8080/show",
+                withCredentials: true,
+                params: {
+
+                }
+            }).then((res) => {
+                this.tableBooks = res.data.tableBooks;
+                console.log(this.tableBooks);
+            }).catch(err => {
+                console.log('error');
+            });
+        }
+
+    })
+</script>
+</html>

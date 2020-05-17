@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        a:link{
+            color: #333;
+            text-decoration: none;
+        }
+        a:visited{
+            color: #333;
+        }
+        a:hover{
+            color: red;
+        }
+        input:focus{
+            background-color:#00f1e5;
+        }
+        a{
+            width: 150px;
+            height: 50px;
+            background-color: #83c8e4;
+            display: block;
+        }
+        .center{
+            text-align: center;
+            font-size: 30px;
+        }
+        dd{
+            margin:0;
+        }
+    </style>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+</head>
+<body>
+<br/>
+<table align="center" width="1200px" height="700px"  border="1" cellspacing="10" cellpadding="20" style="background-color:#e7f7d5;">
+    <tr>
+        <td align="center" style="background-color: #cddfeb"><b><i>图书查询与借阅</i></b>
+            <dl>
+                <dt>
+                    <img src ="book.png" width="100" height="100"/>
+                </dt>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;background-color: #83c8e4; ">图书查询</dd>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="TRY.html">图书借阅</a></dd>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="Return.html">图书归还</a></dd>
+            </dl>
+        </td>
+        <td>
+            <b style="font-size:35px">图书查询</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+
+            <br/><br/><br/><br/><br/><br/>
+
+            <div  id = "chaxun" class="chaxun">
+                <select style="height:40px;width:180px" name="查询方式"  v-model="select" placeholder = "请选择查询方式" >
+
+                    <option value="1" >id查询</option>
+                    <option value="2">书名查询</option>
+                </select>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input style="height:40px;width:420px;font-size:20px" type="text" name="查询条件" v-model="param" value="输入"  style="width:220px;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input style="height:40px;width:100px;" type ="button" @click=query($event)  value="查询">
+            </div>
+
+
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: #cddfeb"><b><i>个人信息设置</i></b>
+            <dl>
+                <dt >
+                    <img src ="license.png" width="100" height="100"/>
+                </dt>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="Id.html">证件信息</a></dd>
+
+            </dl>
+        </td>
+        <td rowspan="3" align="center" valign="top"  >
+            <table  id="es"  align= center border= 1 cellpadding= 10 cellspacing=0  width=1000px>
+                <thead>
+                <tr style="background-color: white;">
+                    <td align= center style="width:50px;font-size:20px;height:15px;cellpadding:15px">图书ID</td><td align= center style="width:200px;font-size:20px">图书名称</td><td align= center style="width:100px;font-size:20px">图书作者</td><td align= center style="width:100px;font-size:20px">出版社</td><td align= center style="width:200px;font-size:20px">图书描述</td><td align= center style="width:100px;font-size:20px">剩余</td>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+
+            </table>
+
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: #cddfeb"><b><i>推荐信息</i></b>
+            <dl>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="Commands.html">图书推荐</a></dd>
+            </dl>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: #cddfeb"><b><i>安全退出系统</i></b>
+            <dl>
+                <dd class="center" style="border:#000 solid 1px; height:50px;width:150px;"><a href="index.html">安全退出</a></dd>
+            </dl>
+        </td>
+    </tr>
+</table>
+
+</body>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#chaxun',
+        data: {
+            select: 1,
+            param: '',
+        },
+        methods:{
+            query: function(event) {
+                axios({
+                    method:"post",
+                    url:"http://127.0.0.1:8080/query",
+                    withCredentials:true,
+                    params: {
+                        param: this.param,
+                        select: this.select,
+                    }
+                }).then((res)=>{
+                    console.log(res.data.books);
+                    var books =  res.data.books;
+                    delete  books[0].times;
+                    console.log(res.data.books);
+                    var tbody = document.querySelector('#es');
+                    for(var i = 0;i < books.length ;i++){
+                        var tr = document.createElement('tr');
+                        tbody.appendChild(tr);
+                        for(var k in books[i]){
+                            var td = document.createElement('td');
+
+                            td.innerHTML = books[i][k];
+                            tr.appendChild(td);
+                        }
+                    }
+
+                }).catch(err => {
+                    console.log('error');
+                });
+            }
+        }
+    })
+</script>
+</html>
