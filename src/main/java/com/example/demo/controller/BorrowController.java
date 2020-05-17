@@ -28,6 +28,12 @@ public class BorrowController {
     @Autowired
     private BorrowMapperExt borrowService;
 
+    /**
+     * Borrow
+     * @param request
+     * @param bookid
+     * @return
+     */
     @RequestMapping("/borrow")
     public String borrow(HttpServletRequest request, @RequestParam Long bookid) {
         Cookie[] cookies = request.getCookies();
